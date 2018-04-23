@@ -4,10 +4,11 @@ $allCoins = ["300","611","808","888","EOS","QSP","MONA","PLBT","HAV","BKX","SRC"
 
 $api = 'https://min-api.cryptocompare.com/data/dayAvg?';
 $ratio = '';
+$fromAmount = 1;
 
 if ($_GET['submit'] ?? false) {
-    $date = !empty($_GET['date']) ? $_GET['date'] : 'now';
-    $date = strtotime($date);
+    $date = $_GET['date'] ?? 'now';
+    $date = strtotime(($date == '') ? 'now' : $date);
 
     $from = $_GET['from'];
     $fromAmount = (float)$_GET['fromAmount'] ?? 1;
@@ -21,6 +22,7 @@ if ($_GET['submit'] ?? false) {
 
     if (isset($result['Response']) && $result['Response'] === 'Error') {
         echo "<h2>Error - wrong pair?</h2>";
+        var_dump($result);
     } else {
         $ratio = (float)$result[$to] * $fromAmount;
     }
@@ -29,16 +31,16 @@ if ($_GET['submit'] ?? false) {
 ?>
 
 <form action="">
-    <input type="date" name="date" value="<?= $_GET['date'] ?>">
-    <input type="number" name="fromAmount" id="fromAmount" placeholder="amount" value="<?= $fromAmount ?>">
+    <input type="date" name="date" value="<?= $_GET['date'] ?? '' ?>">
+    <input type="number" step="0.00000000000001" name="fromAmount" id="fromAmount" placeholder="amount" value="<?= $fromAmount ?>">
     <select name="from" id="from">
         <?php foreach($allCoins as $c): ?>
-            <option <?php echo ($c != $from) ?: 'selected="selected"' ?> value="<?= $c ?>"><?= $c ?></option>
+            <option <?php echo ($from ?? false && $c != $from) ?: 'selected="selected"' ?> value="<?= $c ?>"><?= $c ?></option>
         <?php endforeach; ?>
     </select>
     <select name="to" id="to">
         <?php foreach($allCoins as $c): ?>
-            <option <?php echo ($c != $to) ?: 'selected="selected"' ?>  value="<?= $c ?>"><?= $c ?></option>
+            <option <?php echo ($to ?? false && $c != $to) ?: 'selected="selected"' ?>  value="<?= $c ?>"><?= $c ?></option>
         <?php endforeach; ?>
     </select>
     <?php if ($ratio !== '') : ?>
