@@ -1,90 +1,41 @@
 BigNumber.config({ EXPONENTIAL_AT: 50 });
 BigNumber.config({ ERRORS: false });
 
-function init(usd, eur){
-	calculateEther("ether", new BigNumber(1));	
-	calculateUSD(usd);
-	calculateEUR(eur);
+function init(){
+	calculateEther("ether", new BigNumber(1));
 }
-
-function calculateUSD(usd){
-	var total = parseFloat(usd);
-	document.getElementById("usd").value = (parseFloat(document.getElementById("ether").value)*total).toFixed(3);
-}
-
-function calculateEUR(eur){
-	var total = parseFloat(eur);
-	document.getElementById("eur").value = (parseFloat(document.getElementById("ether").value)*total).toFixed(3);
-}
-
-function calculate(el, usd, eur){
-	
-	//if(parseFloat(el.value) != NaN){
-		calculateEther(el.id, convertToEther(el));	
-		calculateUSD(usd);
-		calculateEUR(eur);
+function calculate(el){
+		calculateEther(el.id, convertToEther(el));
 		return true;
-	//}
-	
-	//return false;
-		
-	
 }
+
+mapping = {
+  'wei': 1000000000000000000,
+  'kwei':1000000000000000,
+  'mwei': 1000000000000,
+  'gwei': 1000000000,
+  'szabo': 1000000,
+  'finney': 1000,
+  'ether': 1,
+  'kether': 0.001,
+  'mether': 0.000001,
+  'gether': 0.000000001,
+  'tether': 0.000000000001
+};
 
 function calculateEther(id,v){
-	
-	if(id != "wei" ) document.getElementById("wei").value = v.times(new BigNumber(1000000000000000000)).toString();
-	if(id != "kwei" ) document.getElementById("kwei").value = v.times(new BigNumber(1000000000000000)).toString();
-	if(id != "mwei" ) document.getElementById("mwei").value = v.times(new BigNumber(1000000000000)).toString();
-	if(id != "gwei" ) document.getElementById("gwei").value = v.times(new BigNumber(1000000000)).toString();
-	if(id != "szabo" ) document.getElementById("szabo").value = v.times(new BigNumber(1000000)).toString();
-	if(id != "finney" ) document.getElementById("finney").value = v.times(new BigNumber(1000)).toString();
-	if(id != "ether" ) document.getElementById("ether").value = v.times(new BigNumber(1)).toString();
-	if(id != "kether" ) document.getElementById("kether").value = v.times(new BigNumber(0.001)).toString();
-	if(id != "mether" ) document.getElementById("mether").value = v.times(new BigNumber(0.000001)).toString();
-	if(id != "gether" ) document.getElementById("gether").value = v.times(new BigNumber(0.000000001)).toString();
-	if(id != "tether" ) document.getElementById("tether").value = v.times(new BigNumber(0.000000000001)).toString();
+  for (let key in mapping) {
+    if (mapping.hasOwnProperty(key)) {
+      if(id !== key ) document.getElementById(key).value = v.times(new BigNumber(mapping[key])).toString();
+    }
+  }
 }
 
 function convertToEther(el){
-	var id = el.id;
-	var value = new BigNumber(el.value);
-	switch(id) {
-		case "wei":
-			value = value.times(new BigNumber(0.000000000000000001));
-			break;
-		case "kwei":
-			value = value.times(new BigNumber(0.000000000000001));
-			break;
-		case "mwei":
-			value = value.times(new BigNumber(0.000000000001));	
-			break;
-		case "gwei":
-			value = value.times(new BigNumber(0.000000001));	
-			break;
-		case "szabo":
-			value = value.times(new BigNumber(0.000001));	
-			break;
-		case "finney":
-			value = value.times(new BigNumber(0.001));	
-			break;
-		case "ether":
-			value = value.times(new BigNumber(1));	
-			break;
-		case "kether":
-			value = value.times(new BigNumber(1000));	
-			break;
-		case "mether":
-			value = value.times(new BigNumber(1000000));	
-			break;
-		case "gether":
-			value = value.times(new BigNumber(1000000000));	
-			break;
-		case "tether":
-			value = value.times(new BigNumber(1000000000000));	
-			break;		
-		default:
-			break;
-	}
+	let id = el.id;
+	let value = new BigNumber(el.value);
+	value = value.times(new BigNumber(mapping[id]));
 	return value;
 }
+
+init();
