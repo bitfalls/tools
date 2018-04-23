@@ -34,6 +34,7 @@
             <li><a href="/calculator">Calculator</a></li>
             <li><a href="/ltc">LTC address converter</a></li>
             <li><a href="/eth">Ether unit converter</a></li>
+            <li><a href="https://github.com/bitfalls/tools">Contribute on Github</a></li>
         </ul>
     </nav>
 
