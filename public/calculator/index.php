@@ -1325,8 +1325,8 @@ if ($_GET['submit'] ?? false) {
     $date = $_GET['date'] ?? 'now';
     $date = strtotime(($date == '') ? 'now' : $date);
 
-    $origfee        = $_GET['fee'] ?? 0;
-    $fee = $origfee / 100;
+    $origfee    = $_GET['fee'] ?? 0;
+    $fee        = $origfee / 100;
     $from       = $_GET['from'];
     $fromAmount = (float)$_GET['fromAmount'] ?? 1;
     if ($fromAmount == 0) {
@@ -1345,38 +1345,58 @@ if ($_GET['submit'] ?? false) {
     }
 }
 
+require_once '../../common/header.php';
+
 ?>
 
-<form action="">
-    <div><label for="date">Date</label>
-        <input id="date" type="date" name="date"
-               value="<?= $_GET['date'] ?? '' ?>">
-    </div>
-    <div><label for="fromAmount">Amount</label>
-        <input type="number" step="0.00000000000001" name="fromAmount"
-               id="fromAmount" placeholder="amount" value="<?= $fromAmount ?>">
-    </div>
-    <label for="from">Currency 1</label>
-    <select name="from" id="from">
-        <?php foreach ($allCoins as $c): ?>
-            <option <?php echo (($from ?? false) && $c != $from) ?: 'selected="selected"' ?>
-                    value="<?= $c ?>"><?= $c ?></option>
-        <?php endforeach; ?>
-    </select>
-    <label for="id">Currency 2</label>
-    <select name="to" id="to">
-        <?php foreach ($allCoins as $c): ?>
-            <option <?php echo (($to ?? false) && $c != $to) ?: 'selected="selected"' ?>
-                    value="<?= $c ?>"><?= $c ?></option>
-        <?php endforeach; ?>
-    </select>
-    <label for="fee">
-        Fee in %
-        <input type="number" step="0.01" value="<?= $origfee ?? 0 ?>" name="fee" id="fee">
-    </label>
-    <?php if ($ratio !== '') : ?>
-        <h3><?= $fromAmount . ' ' . $from ?> = <?= $ratio . ' ' . $to ?></h3>
-    <?php endif; ?>
-    <input type="submit" value="Fetch" name="submit">
-</form>
+    <div>
 
+        <form action="">
+            <p>Use this tool to find out how much a cryptocurrency you theoretically got on a given date for another type of cryptocurrency. Select a fee in % to account for losses caused by exchanges.</p>
+
+            <hr>
+
+            <div><label for="date">Date</label>
+                <input id="date" type="date" name="date"
+                       value="<?= $_GET['date'] ?? '' ?>">
+            </div>
+            <div><label for="fromAmount">Amount</label>
+                <input type="number" step="0.00000000000001" name="fromAmount"
+                       id="fromAmount" placeholder="amount"
+                       value="<?= $fromAmount ?>">
+            </div>
+            <div>
+            <label for="from">Currency 1</label>
+            <select name="from" id="from">
+                <?php foreach ($allCoins as $c): ?>
+                    <option <?php echo (($from ?? false) && $c != $from) ?: 'selected="selected"' ?>
+                            value="<?= $c ?>"><?= $c ?></option>
+                <?php endforeach; ?>
+            </select>
+            </div>
+            <div>
+            <label for="id">Currency 2</label>
+            <select name="to" id="to">
+                <?php foreach ($allCoins as $c): ?>
+                    <option <?php echo (($to ?? false) && $c != $to) ?: 'selected="selected"' ?>
+                            value="<?= $c ?>"><?= $c ?></option>
+                <?php endforeach; ?>
+            </select>
+            </div>
+            <div>
+            <label for="fee">
+                Fee in %
+                <input type="number" step="0.01" value="<?= $origfee ?? 0 ?>"
+                       name="fee" id="fee">
+            </label>
+            </div>
+            <?php if ($ratio !== '') : ?>
+                <h3><?= $fromAmount . ' ' . $from ?> = <?= $ratio . ' ' . $to ?></h3>
+            <?php endif; ?>
+            <button type="submit" class="submit" value="Fetch" name="submit">Fetch</button>
+        </form>
+    </div>
+
+<?php
+
+require_once '../../common/footer.php';
