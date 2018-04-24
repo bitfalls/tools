@@ -1,1 +1,1 @@
-This is the repo for http://tools.bitfalls.com where we'll be putting helpful cryptocurrency related tools.
+This is the repo for http://tools.bitfalls.com/calculator where we'll be putting helpful cryptocurrency related tools.
